@@ -7,9 +7,9 @@ struct Libro {
 };
 
 int menu();
-void registrarLibros(struct Libro libros[], int i);
+void registrarLibro(struct Libro libros[], int indice, int *contadorID);
 void mostrarLibros(struct Libro libros[]);
 void buscarLibroId(struct Libro libros[], int id);
 void buscarLibroTitulo(struct Libro libros[], char titulo[]);
 void actualizarEstado(struct Libro libros[], int id);
-void eliminarLibro(struct Libro libros[], int* count);
+void eliminarLibro(struct Libro libros[], int *i);
