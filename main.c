@@ -4,15 +4,15 @@
 
 int main() {
     struct Libro libros[20] = {0};
-    int opc, count = 0;
+    int opcion, i = 0, contadorID = 1;
 
     do {
-        opc = menu();
-        switch (opc) {
+        opcion = menu();
+        switch (opcion) {
             case 1:
-                if (count < 20) {
-                    registrarLibros(libros, count);
-                    count++;
+                if (i < 20) {
+                    registrarLibro(libros, i, &contadorID);
+                    i++;
                 } else {
                     printf("Limite de libros alcanzado.\n");
                 }
@@ -22,7 +22,7 @@ int main() {
                 break;
             case 3: {
                 int id;
-                printf("Ingrese el id del libro a buscar: ");
+                printf("Ingrese el ID del libro a buscar: ");
                 scanf("%d", &id);
                 buscarLibroId(libros, id);
                 break;
@@ -30,7 +30,7 @@ int main() {
             case 4: {
                 char titulo[100];
                 printf("Ingrese el titulo del libro a buscar: ");
-                getchar(); // Limpia el buffer
+                getchar();
                 fgets(titulo, 100, stdin);
                 titulo[strcspn(titulo, "\n")] = 0;
                 buscarLibroTitulo(libros, titulo);
@@ -44,16 +44,16 @@ int main() {
                 break;
             }
             case 6:
-                eliminarLibro(libros, &count);
+                eliminarLibro(libros, &i);
                 break;
             case 7:
-                printf("Saliendo del programa...\n");
+                printf("Saliendo del programa.\n");
                 break;
             default:
-                printf("Opcion invalida. Por favor, ingrese una opcion valida.\n");
+                printf("Opcion inválida. Por favor, ingrese una opcion valida.\n");
                 break;
         }
-    } while (opc != 7);
+    } while (opcion != 7);
 
     return 0;
 }
