@@ -2,44 +2,43 @@
 #include <string.h>
 #include "funciones.h"
 
-int menu() 
-{
-    int opc;
+int menu() {
+    int opcion;
     printf("\n MENU \n");
-    printf("1. Registro de libros\n");
-    printf("2. Ver listado de libros\n");
+    printf("1. Registrar libro\n");
+    printf("2. Mostrar listado de libros\n");
     printf("3. Buscar libro por ID\n");
     printf("4. Buscar libro por titulo\n");
-    printf("5. Actualizar el estado del libro\n");
+    printf("5. Actualizar estado del libro\n");
     printf("6. Eliminar libro\n");
     printf("7. Salir\n");
     printf("Elija una opcion: ");
-    scanf("%d", &opc);
-    return opc;
+    scanf("%d", &opcion);
+    return opcion;
 }
 
-void registrarLibros(struct Libro libros[], int i) {
-    if (i < 20) {
-        libros[i].id = i + 1; 
+void registrarLibro(struct Libro libros[], int indice, int *contadorID) {
+    if (indice < 20) {
+        libros[indice].id = (*contadorID)++;
         printf("\nIngrese el titulo del libro: ");
-        getchar(); 
-        fgets(libros[i].titulo, 100, stdin);
-        libros[i].titulo[strcspn(libros[i].titulo, "\n")] = 0; 
+        getchar();
+        fgets(libros[indice].titulo, 100, stdin);
+        libros[indice].titulo[strcspn(libros[indice].titulo, "\n")] = 0;
 
         printf("Ingrese el autor del libro: ");
-        fgets(libros[i].autor, 50, stdin);
-        libros[i].autor[strcspn(libros[i].autor, "\n")] = 0; 
+        fgets(libros[indice].autor, 50, stdin);
+        libros[indice].autor[strcspn(libros[indice].autor, "\n")] = 0;
 
         do {
             printf("Ingrese el anio de publicacion del libro: ");
-            scanf("%d", &libros[i].anio);
-            if (libros[i].anio < 0 || libros[i].anio > 2024) {
+            scanf("%d", &libros[indice].anio);
+            if (libros[indice].anio < 0 || libros[indice].anio > 2024) {
                 printf("Anio no valido. Intente de nuevo.\n");
             }
-        } while (libros[i].anio < 0 || libros[i].anio > 2024);
+        } while (libros[indice].anio < 0 || libros[indice].anio > 2024);
 
-        strcpy(libros[i].estado, "Disponible");
-        printf("\nLibro registrado con exito. ID: %d\n", libros[i].id);
+        strcpy(libros[indice].estado, "Disponible");
+        printf("\nLibro registrado. ID: %d\n", libros[indice].id);
     } else {
         printf("\nNo se pueden agregar mas libros. Limite alcanzado.\n");
     }
@@ -93,13 +92,13 @@ void actualizarEstado(struct Libro libros[], int id) {
     for (int i = 0; i < 20; i++) {
         if (libros[i].id == id) {
             printf("Ingrese el nuevo estado del libro (Disponible / Prestado): ");
-            getchar(); 
+            getchar();
             fgets(nuevoEstado, 50, stdin);
-            nuevoEstado[strcspn(nuevoEstado, "\n")] = 0;  
+            nuevoEstado[strcspn(nuevoEstado, "\n")] = 0;
 
             if (strcmp(nuevoEstado, "Disponible") == 0 || strcmp(nuevoEstado, "Prestado") == 0) {
-                strcpy(libros[i].estado, nuevoEstado);  
-                printf("\nEstado actualizado con exito. Nuevo estado: %s\n", libros[i].estado);
+                strcpy(libros[i].estado, nuevoEstado);
+                printf("\nEstado actualizado. Nuevo estado: %s\n", libros[i].estado);
             } else {
                 printf("\nEstado no valido. El estado debe ser 'Disponible' o 'Prestado'.\n");
             }
@@ -109,24 +108,23 @@ void actualizarEstado(struct Libro libros[], int id) {
     printf("\nLibro no encontrado.\n");
 }
 
-void eliminarLibro(struct Libro libros[], int* count) {
+void eliminarLibro(struct Libro libros[], int *i) {
     int id;
     printf("\nIngrese el ID del libro a eliminar: ");
     scanf("%d", &id);
 
-    for (int i = 0; i < 20; i++) {
-        if (libros[i].id == id) {
+    for (int j = 0; j < 20; j++) {
+        if (libros[j].id == id) {
             printf("¿Esta seguro de que desea eliminar este libro? (1. Si / 2. No): ");
             int confirmar;
             scanf("%d", &confirmar);
             if (confirmar == 1) {
-              
-                for (int j = i; j < (*count) - 1; j++) {
-                    libros[j] = libros[j + 1];
+                for (int k = j; k < (*i) - 1; k++) {
+                    libros[k] = libros[k + 1];
                 }
-                (*count)--;
-                libros[*count].id = 0;  
-                printf("\nLibro eliminado con exito.\n");
+                (*i)--;
+                libros[*i].id = 0;
+                printf("\nLibro eliminado.\n");
             } else if (confirmar == 2) {
                 printf("\nOperacion cancelada. El libro no fue eliminado.\n");
             } else {
